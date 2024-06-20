@@ -21,10 +21,7 @@ const extensions = [
 export default {
   input: getPath('../src/index.ts'),
   external: [
-    'react',
-    'lodash',
     'axios',
-    'eventemitter3',
     'm3u8-parser'
   ],
   output: [
@@ -33,10 +30,7 @@ export default {
       file: 'demos/dist/components/index.js', // 通用模块
       format: 'umd',
       globals: {
-        react: 'React',
-        lodash: 'lodash',
         axios: 'axios',
-        eventemitter3: 'eventemitter3',
         'm3u8-parser': 'm3u8-parser'
       }
     },
@@ -45,10 +39,7 @@ export default {
       file: 'demos/dist/components/index.esm.js', // es6模块
       format: 'esm',
       globals: {
-        react: 'React',
-        lodash: 'lodash',
         axios: 'axios',
-        eventemitter3: 'eventemitter3',
         'm3u8-parser': 'm3u8-parser'
       }
     }

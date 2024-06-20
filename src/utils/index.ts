@@ -24,6 +24,18 @@ export function getUA () {
 }
 
 /**
+ * 加载文件
+ */
+export async function loadFile(url: string) {
+  try {
+    const res = await axios.get(url)
+    return res.data
+  } catch (err) {
+    console.error(err)
+  }
+}
+
+/**
  * 转秒
  */
 function toSeconds(t: string) {
@@ -37,24 +49,29 @@ function toSeconds(t: string) {
   return s
 }
 
+type SubTitleType = {
+  sort: string
+  text: string
+  startTime: number
+  endTime: number
+}
+
 /**
  * 格式化字幕文件
  */
-export function parseSubTitleFile(data: string) {
-  const list: any[] = []
+export function parseSubTitleFile(fileData: string): SubTitleType[] {
+  const list: SubTitleType[] = []
 
-  data
+  fileData
     .split(/\n\s*\n/g)
     .filter((item) => item !== '')
-    .map((item, index) => {
+    .map((item) => {
       const textItem = item.split(/\n/)
       list.push({
-        index,
         sort: textItem[0],
         text: textItem[2],
         startTime: toSeconds(textItem[1].split(' --> ')[0]),
-        endTime: toSeconds(textItem[1].split(' --> ')[1]),
-        timeLine: textItem[1]
+        endTime: toSeconds(textItem[1].split(' --> ')[1])
       })
       return false
     })
@@ -63,14 +80,22 @@ export function parseSubTitleFile(data: string) {
 }
 
 /**
- * 加载字幕文件
+ * 通过时间匹配字幕
+ * @param {number} currentTime
+ * @param {SubTitleType[]} list
  */
-export async function loadSubTitleFile(url: string) {
-  try {
-    const res = await axios.get(url)
-    return parseSubTitleFile(res.data)
-  } catch (err) {
-    console.error(err)
+export function matchSubTitleByTime(currentTime: number, list: SubTitleType[]) {
+  let str = ''
+
+  for (let i = 0; i < list.length; i++) {
+    const item = list[i]
+    const { startTime, endTime, text } = item
+
+    if ((currentTime >= startTime) && (currentTime <= endTime)) {
+      str = text
+      break
+    }
   }
-  return false
+
+  return str
 }

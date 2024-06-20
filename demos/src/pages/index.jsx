@@ -17,16 +17,33 @@ export default () => {
     player.current.pause()
   }
 
+  const onParsed = (levels) => {
+    console.log('Parsed!')
+    console.log(levels)
+  }
+
+  const onParseError = (err) => {
+    console.error(err)
+  }
+
+  const ready = () => {
+    console.log('Ready!')
+  }
+
   useEffect(() => {
     player.current = new HLSPlayer({
       elem: video.current,
-      src: url1
+      src: url1,
+      onParsed,
+      onParseError
     })
   }, [])
 
   return (
     <>
-      <video ref={video} />
+      <div className={Styles.container}>
+        <video ref={video} playsInline onCanPlayThrough={ready} />
+      </div>
       <div className={Styles.test}>
         <div className={Styles.test__btn} onClick={play}>Play</div>
         <div className={Styles.test__btn} onClick={pause}>Pause</div>
