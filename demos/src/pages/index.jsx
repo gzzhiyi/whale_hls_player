@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react'
-import { HLSPlayer } from '../../dist/components/index.esm.js'
+import { HlsPlayer } from '../../dist/components/index.esm.js'
 import Styles from './index.module.less'
 
 export default () => {
@@ -31,7 +31,7 @@ export default () => {
   }
 
   useEffect(() => {
-    player.current = new HLSPlayer({
+    player.current = new HlsPlayer({
       elem: video.current,
       src: url1,
       onParsed,
