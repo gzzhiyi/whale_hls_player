@@ -10,6 +10,8 @@ export function getClientWidth() {
 
 /**
  * 加载文件
+ * @param {string} url - 文件路径
+ * @return {Object}
  */
 export async function loadFile(url: string) {
   try {
@@ -21,7 +23,27 @@ export async function loadFile(url: string) {
 }
 
 /**
+ * 对集合通过Key名称去重
+ * @param {Object[]} collention
+ * @param {string} keyName
+ * @returns {Object[]}
+ */
+export function uniqueByKey(collention, keyName) {
+  const map = new Map()
+
+  collention.forEach(item => {
+    if (!map.has(item[keyName])) {
+      map.set(item[keyName], item)
+    }
+  })
+
+  return Array.from(map.values())
+}
+
+/**
  * 转秒
+ * @param {string} t
+ * @returns {string}
  */
 function toSeconds(t: string) {
   let s = 0.0
@@ -42,7 +64,9 @@ type SubTitleType = {
 }
 
 /**
- * 格式化字幕文件
+ * 解析字幕文件
+ * @param {string} fileData - 字幕文件
+ * @returns {SubTitleType[]}
  */
 export function parseSubTitleFile(fileData: string): SubTitleType[] {
   const list: SubTitleType[] = []
@@ -66,8 +90,9 @@ export function parseSubTitleFile(fileData: string): SubTitleType[] {
 
 /**
  * 通过时间匹配字幕
- * @param {number} currentTime
- * @param {SubTitleType[]} list
+ * @param {number} currentTime - 当前时间
+ * @param {SubTitleType[]} list - 字幕列表
+ * @returns {string}
  */
 export function matchSubTitleByTime(currentTime: number, list: SubTitleType[]) {
   let str = ''
@@ -83,16 +108,4 @@ export function matchSubTitleByTime(currentTime: number, list: SubTitleType[]) {
   }
 
   return str
-}
-
-export function uniqueByKey(arr, keyName) {
-  const map = new Map()
-
-  arr.forEach(item => {
-    if (!map.has(item[keyName])) {
-      map.set(item[keyName], item)
-    }
-  })
-
-  return Array.from(map.values())
 }

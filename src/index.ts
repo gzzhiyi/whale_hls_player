@@ -1,9 +1,9 @@
-import { loadFile, parseSubTitleFile, matchSubTitleByTime } from '@/utils'
-import HLSPlayer from '@/classes/HLSPlayer'
+import { loadFile, matchSubTitleByTime, parseSubTitleFile } from '@/utils'
+import HlsPlayer from '@/classes/HlsPlayer'
 
 export {
   loadFile,
   parseSubTitleFile,
   matchSubTitleByTime,
-  HLSPlayer
+  HlsPlayer
 }
