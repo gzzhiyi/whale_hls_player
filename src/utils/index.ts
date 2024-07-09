@@ -1,26 +1,11 @@
 import axios from 'axios'
 
 /**
- * 获取浏览器 UA
- * @return {object}
+ * 获取浏览器宽度
+ * @returns {number}
  */
-export function getUA () {
-  const u = window.navigator.userAgent
-
-  return {
-    trident: u.includes('Trident'), // IE内核
-    presto: u.includes('Presto'), // opera内核
-    webKit: u.includes('AppleWebKit'), // 苹果、谷歌内核
-    gecko: u.includes('Gecko'), // 火狐内核
-    safari: u.includes('Safari'), // safari浏览器
-    mobile: !!u.match(/AppleWebKit.*Mobile.*/), // 移动终端
-    ios: !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/), // ios终端
-    android: u.includes('Android') || u.includes('Linux'), // android或uc浏览器
-    iPhone: u.includes('iPhone'), // iPhone或QQHD浏览器
-    iPad: u.includes('iPad'), // iPad
-    weibo: u.toLowerCase().includes('weibo'), // 微博
-    wechat: u.toLowerCase().includes('micromessenger') // 微信
-  }
+export function getClientWidth() {
+  return document.documentElement.clientWidth || document.body.clientWidth || window.innerWidth
 }
 
 /**
@@ -98,4 +83,16 @@ export function matchSubTitleByTime(currentTime: number, list: SubTitleType[]) {
   }
 
   return str
+}
+
+export function uniqueByKey(arr, keyName) {
+  const map = new Map()
+
+  arr.forEach(item => {
+    if (!map.has(item[keyName])) {
+      map.set(item[keyName], item)
+    }
+  })
+
+  return Array.from(map.values())
 }
