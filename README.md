@@ -13,13 +13,13 @@
     git clone https://github.com/gzzhiyi/whale_hls_player.git
   ```
 
-### npm install
+### Npm install
 
   ```bash
     npm i whale-hls-player
   ```
 
-### yarn install
+### Yarn install
 
   ```bash
     yarn add whale-hls-player

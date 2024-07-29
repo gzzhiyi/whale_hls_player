@@ -17,6 +17,10 @@ export default () => {
     player.current.pause()
   }
 
+  const ready = () => {
+    console.log('Ready!')
+  }
+
   const onParsed = (levels) => {
     console.log('Parsed!')
     console.log(levels)
@@ -24,10 +28,6 @@ export default () => {
 
   const onParseError = (err) => {
     console.error(err)
-  }
-
-  const ready = () => {
-    console.log('Ready!')
   }
 
   useEffect(() => {

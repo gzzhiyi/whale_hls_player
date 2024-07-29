@@ -1,18 +1,6 @@
-export declare function getUA(): {
-    trident: boolean;
-    presto: boolean;
-    webKit: boolean;
-    gecko: boolean;
-    safari: boolean;
-    mobile: boolean;
-    ios: boolean;
-    android: boolean;
-    iPhone: boolean;
-    iPad: boolean;
-    weibo: boolean;
-    wechat: boolean;
-};
+export declare function getClientWidth(): number;
 export declare function loadFile(url: string): Promise<any>;
+export declare function uniqueByKey(collention: any, keyName: any): any[];
 type SubTitleType = {
     sort: string;
     text: string;

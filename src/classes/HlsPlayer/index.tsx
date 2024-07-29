@@ -86,8 +86,7 @@ export default class HlsPlayer {
    * 解析视频分辨率
    */
   private parseLevels(list) {
-    const filterArr = list.reduce((all, next) => (all.some((item) => item.label === next.label) ? all : [...all, next]), [])
-    return filterArr
+    return list.reduce((all, next) => (all.some((item) => item.label === next.label) ? all : [...all, next]), [])
   }
 
   /**
