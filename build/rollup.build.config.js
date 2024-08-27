@@ -5,7 +5,7 @@ import replace from '@rollup/plugin-replace'
 import json from '@rollup/plugin-json'
 import nodePolyfills from 'rollup-plugin-polyfill-node'
 import typescript from 'rollup-plugin-typescript2'
-import { uglify } from 'rollup-plugin-uglify'
+import { terser } from 'rollup-plugin-terser'
 import postcss from 'rollup-plugin-postcss'
 import autoprefixer from 'autoprefixer'
 import pxtorem from 'postcss-pxtorem'
@@ -79,6 +79,6 @@ export default {
       exclude: ['node_modules/**', 'dist/**', 'demos/**', 'build/**']
     }),
     typescript({ extensions }),
-    uglify()
+    terser()
   ]
 }

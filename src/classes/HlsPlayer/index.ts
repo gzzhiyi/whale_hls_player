@@ -105,7 +105,11 @@ export default class HlsPlayer {
 
       const parsedManifest = parser.manifest
       if (!parsedManifest?.playlists) {
-        return []
+        this.video.src = this.src
+        this.video.load()
+
+        this.onParsed && this.onParsed(this.levels)
+        return
       }
 
       let list = parsedManifest.playlists.map((item) => ({
@@ -113,17 +117,15 @@ export default class HlsPlayer {
         url: `${baseUrl}/${item?.uri}`
       }))
 
-      list = uniqueByKey(list, 'label')
+      if (list.length > 0) {
+        list = uniqueByKey(list, 'label')
+        this.levels = this.sortByLevels(this.parseLevels(list))
+      }
 
-      // 画质
-      this.levels = this.sortByLevels(this.parseLevels(list))
-
-      // 初始化浏览器链接
       const currentLevel = this.matchLevels()
       this.video.src = currentLevel?.url || ''
       this.video.load()
 
-      // 回调
       this.onParsed && this.onParsed(this.levels)
     } catch (err) {
       this.parseErrorHandle(err)
@@ -138,19 +140,22 @@ export default class HlsPlayer {
       this.hls.loadSource(this.src)
       this.hls.attachMedia(this.video)
 
-      this.hls.on(HLS.Events.MANIFEST_PARSED, (event, data) => { // Get video resolutions
+      this.hls.on(HLS.Events.MANIFEST_PARSED, (event, data) => {
         this.hls.currentLevel = -1
 
-        const list = data.levels.map((item, index: number) => ({
-          label: `${item.width}P`,
-          url: item.url[0],
-          value: index
-        }))
+        let list = data.levels
+          .filter(item => item.width > 0)
+          .map((item, index: number) => ({
+            label: `${item.width}P`,
+            url: item.url[0],
+            value: index
+          }))
 
-        // 画质
-        this.levels = this.sortByLevels(this.parseLevels(list))
+        if (list.length > 0) {
+          list = uniqueByKey(list, 'label')
+          this.levels = this.sortByLevels(this.parseLevels(list))
+        }
 
-        // 回调
         this.onParsed && this.onParsed(this.levels)
       })
 
@@ -175,7 +180,7 @@ export default class HlsPlayer {
     } else if (HLS.isSupported()) {
       this.parseByHLS()
     } else {
-      this.parseErrorHandle('No supported video player.')
+      this.parseErrorHandle('[No supported video player]')
     }
   }
 
@@ -205,6 +210,5 @@ export default class HlsPlayer {
     this.hls?.destroy()
 
     this.video.src = ''
-    this.video.poster = ''
   }
 }
