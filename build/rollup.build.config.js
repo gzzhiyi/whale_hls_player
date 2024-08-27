@@ -15,18 +15,11 @@ import path from 'path'
 import packageJSON from '../package.json'
 
 const getPath = _path => path.resolve(__dirname, _path)
-const extensions = [
-  '.js',
-  '.ts',
-  '.tsx'
-]
+const extensions = ['.js', '.ts', '.tsx']
 
 export default {
   input: getPath('../src/index.ts'),
-  external: [
-    'axios',
-    'm3u8-parser'
-  ],
+  external: ['axios', 'm3u8-parser'],
   output: [
     {
       name: 'whale-hls-player',
@@ -34,7 +27,7 @@ export default {
       format: 'umd',
       globals: {
         axios: 'axios',
-        'm3u8-parser': 'm3u8-parser'
+        'm3u8-parser': 'm3u8-parser',
       }
     },
     {
@@ -43,21 +36,19 @@ export default {
       format: 'esm',
       globals: {
         axios: 'axios',
-        'm3u8-parser': 'm3u8-parser'
+        'm3u8-parser': 'm3u8-parser',
       }
     }
   ],
-  plugins:[
+  plugins: [
     del({ targets: 'dist/*' }),
     nodePolyfills(),
-    nodeResolve(extensions),
+    nodeResolve({ extensions }),
     commonjs(),
     json(),
     replace({
       preventAssignment: true,
-      values: {
-        'process.env.NODE_ENV': JSON.stringify('production')
-      }
+      'process.env.NODE_ENV': JSON.stringify('production')
     }),
     postcss({
       plugins: [
@@ -78,7 +69,7 @@ export default {
       include: ['src/**/*.ts'],
       exclude: ['node_modules/**', 'dist/**', 'demos/**', 'build/**']
     }),
-    typescript({ extensions }),
+    typescript(),
     terser()
   ]
 }

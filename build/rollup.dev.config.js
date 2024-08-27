@@ -12,49 +12,39 @@ import cssnano from 'cssnano'
 import path from 'path'
 
 const getPath = _path => path.resolve(__dirname, _path)
-const extensions = [
-  '.js',
-  '.ts',
-  '.tsx'
-]
+const extensions = ['.js', '.ts', '.tsx']
 
 export default {
   input: getPath('../src/index.ts'),
-  external: [
-    'axios',
-    'm3u8-parser'
-  ],
+  external: ['axios', 'm3u8-parser'],
   output: [
     {
       name: 'whale-hls-player',
-      file: 'demos/dist/components/index.js', // 通用模块
+      file: 'demos/dist/components/index.js',
       format: 'umd',
       globals: {
         axios: 'axios',
-        'm3u8-parser': 'm3u8-parser'
-      }
+        'm3u8-parser': 'm3u8-parser',
+      },
     },
     {
       name: 'whale-hls-player',
-      file: 'demos/dist/components/index.esm.js', // es6模块
+      file: 'demos/dist/components/index.esm.js',
       format: 'esm',
       globals: {
         axios: 'axios',
-        'm3u8-parser': 'm3u8-parser'
-      }
+        'm3u8-parser': 'm3u8-parser',
+      },
     }
   ],
-  plugins:[
+  plugins: [
     nodePolyfills(),
-    nodeResolve(extensions),
+    nodeResolve({ extensions }),
     commonjs(),
     json(),
     replace({
       preventAssignment: true,
-      babelHelpers: 'runtime',
-      values: {
-        'process.env.NODE_ENV': JSON.stringify('developemnt')
-      }
+      'process.env.NODE_ENV': JSON.stringify('development')
     }),
     postcss({
       plugins: [
@@ -63,7 +53,7 @@ export default {
           rootValue: 16,
           propList: ['*'],
           mediaQuery: true,
-          exclude: '/node_modules/i'
+          exclude: '/node_modules/i',
         }),
         cssnano
       ],
