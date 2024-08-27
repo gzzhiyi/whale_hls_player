@@ -17,6 +17,7 @@ type LevelType = {
 
 export default class HlsPlayer {
   public levels: LevelType[] = []
+
   private src: string
   private onParsed: ((levels: LevelType[]) => void) | null
   private onError: ((err: any) => void) | null
@@ -118,7 +119,7 @@ export default class HlsPlayer {
 
     this.hls.on(HLS.Events.ERROR, (event, data) => {
       if (data.fatal) {
-        this.handleError(event, 'HLS')
+        this.handleError(event, 'Parse by HLS')
         this.hls.destroy()
       } else {
         console.warn(event)
