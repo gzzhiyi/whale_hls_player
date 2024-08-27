@@ -4,56 +4,52 @@ import axios from 'axios'
  * 获取浏览器宽度
  * @returns {number}
  */
-export function getClientWidth() {
+export function getClientWidth(): number {
   return document.documentElement.clientWidth || document.body.clientWidth || window.innerWidth
 }
 
 /**
  * 加载文件
  * @param {string} url - 文件路径
- * @return {Object}
+ * @return {Promise<any>}
  */
-export async function loadFile(url: string) {
+export async function loadFile(url: string): Promise<any> {
   try {
     const res = await axios.get(url)
     return res.data
   } catch (err) {
-    console.error(err)
+    console.error('Error loading file:', err)
+    throw err  // 抛出错误以便调用方处理
   }
 }
 
 /**
  * 对集合通过Key名称去重
- * @param {Object[]} collention
- * @param {string} keyName
+ * @param {Object[]} collection - 要去重的集合
+ * @param {string} keyName - 根据哪个key去重
  * @returns {Object[]}
  */
-export function uniqueByKey(collention, keyName) {
-  const map = new Map()
+export function uniqueByKey<T>(collection: T[], keyName: keyof T): T[] {
+  const map = new Map<any, T>()
 
-  collention.forEach(item => {
+  for (const item of collection) {
     if (!map.has(item[keyName])) {
       map.set(item[keyName], item)
     }
-  })
+  }
 
   return Array.from(map.values())
 }
 
 /**
- * 转秒
- * @param {string} t
- * @returns {string}
+ * 转换时间字符串为秒数
+ * @param {string} timeString - 时间字符串
+ * @returns {number}
  */
-function toSeconds(t: string) {
-  let s = 0.0
-  if (t) {
-    const p = t.split(':')
-    for (let i = 0; i < p.length; i++) {
-      s = s * 60 + parseFloat(p[i].replace(',', '.'))
-    }
-  }
-  return s
+function toSeconds(timeString: string): number {
+  if (!timeString) return 0
+
+  return timeString.split(':').reduce((acc, time) => (60 * acc) + parseFloat(time.replace(',', '.')), 0)
 }
 
 type SubTitleType = {
@@ -69,23 +65,18 @@ type SubTitleType = {
  * @returns {SubTitleType[]}
  */
 export function parseSubTitleFile(fileData: string): SubTitleType[] {
-  const list: SubTitleType[] = []
-
-  fileData
+  return fileData
     .split(/\n\s*\n/g)
-    .filter((item) => item !== '')
-    .map((item) => {
+    .filter(item => item.trim() !== '')
+    .map(item => {
       const textItem = item.split(/\n/)
-      list.push({
+      return {
         sort: textItem[0],
         text: textItem[2],
         startTime: toSeconds(textItem[1].split(' --> ')[0]),
         endTime: toSeconds(textItem[1].split(' --> ')[1])
-      })
-      return false
+      }
     })
-
-  return list
 }
 
 /**
@@ -94,18 +85,7 @@ export function parseSubTitleFile(fileData: string): SubTitleType[] {
  * @param {SubTitleType[]} list - 字幕列表
  * @returns {string}
  */
-export function matchSubTitleByTime(currentTime: number, list: SubTitleType[]) {
-  let str = ''
-
-  for (let i = 0; i < list.length; i++) {
-    const item = list[i]
-    const { startTime, endTime, text } = item
-
-    if ((currentTime >= startTime) && (currentTime <= endTime)) {
-      str = text
-      break
-    }
-  }
-
-  return str
+export function matchSubTitleByTime(currentTime: number, list: SubTitleType[]): string {
+  const subtitle = list.find(item => currentTime >= item.startTime && currentTime <= item.endTime)
+  return subtitle ? subtitle.text : ''
 }
