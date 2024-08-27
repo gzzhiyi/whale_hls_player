@@ -1,6 +1,5 @@
 export declare function getClientWidth(): number;
 export declare function loadFile(url: string): Promise<any>;
-export declare function uniqueByKey(collention: any, keyName: any): any[];
 type SubTitleType = {
     sort: string;
     text: string;

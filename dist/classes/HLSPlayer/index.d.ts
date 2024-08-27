@@ -1,8 +1,8 @@
 type PropsType = {
     elem: HTMLVideoElement | string;
     src: string;
-    onParsed?: Function;
-    onError?: Function;
+    onParsed?: (levels: LevelType[]) => void;
+    onError?: (err: any) => void;
 };
 type LevelType = {
     label: string;
@@ -17,15 +17,16 @@ export default class HlsPlayer {
     private hls;
     private video;
     constructor(props: PropsType);
+    private getVideoElement;
     private sortByLevels;
     private matchLevels;
-    private parseErrorHandle;
+    private handleError;
     private parseLevels;
     private parseBySrc;
     private parseByHLS;
     private init;
     play(): void;
     pause(): void;
-    destory(): void;
+    destroy(): void;
 }
 export {};

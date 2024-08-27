@@ -1,6 +1,6 @@
 import HLS from 'hls.js'
 import { Parser } from 'm3u8-parser'
-import { getClientWidth, loadFile, uniqueByKey } from '@/utils'
+import { getClientWidth, loadFile } from '@/utils'
 
 type PropsType = {
   elem: HTMLVideoElement | string

@@ -24,24 +24,6 @@ export async function loadFile(url: string): Promise<any> {
 }
 
 /**
- * 对集合通过Key名称去重
- * @param {Object[]} collection - 要去重的集合
- * @param {string} keyName - 根据哪个key去重
- * @returns {Object[]}
- */
-export function uniqueByKey<T>(collection: T[], keyName: keyof T): T[] {
-  const map = new Map<any, T>()
-
-  for (const item of collection) {
-    if (!map.has(item[keyName])) {
-      map.set(item[keyName], item)
-    }
-  }
-
-  return Array.from(map.values())
-}
-
-/**
  * 转换时间字符串为秒数
  * @param {string} timeString - 时间字符串
  * @returns {number}
